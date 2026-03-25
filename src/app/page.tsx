@@ -1,101 +1,107 @@
-import Image from "next/image";
+'use client'
+import { createClient } from '@/lib/supabase/client'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { FileText, Zap, Target, TrendingUp } from 'lucide-react'
 
-export default function Home() {
+export default function LandingPage() {
+  const supabase = createClient()
+
+  const handleGoogleLogin = async () => {
+    await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback`,
+      },
+    })
+  }
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white">
+      {/* Nav */}
+      <nav className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
+        <div className="flex items-center gap-2">
+          <FileText className="w-6 h-6 text-blue-400" />
+          <span className="font-bold text-lg">ResumeGap</span>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        <Button
+          onClick={handleGoogleLogin}
+          variant="outline"
+          className="border-slate-600 text-slate-200 hover:bg-slate-800 bg-transparent"
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+          Sign in with Google
+        </Button>
+      </nav>
+
+      {/* Hero */}
+      <div className="max-w-4xl mx-auto px-6 py-24 text-center">
+        <Badge className="mb-6 bg-blue-500/10 text-blue-400 border-blue-500/20">
+          Powered by your own Gemini API — Free forever
+        </Badge>
+        <h1 className="text-5xl font-bold mb-6 leading-tight">
+          Know exactly what&apos;s missing
+          <br />
+          <span className="text-blue-400">between you and the job</span>
+        </h1>
+        <p className="text-xl text-slate-400 mb-10 max-w-2xl mx-auto">
+          Paste any job description, upload your resume, and get a precise gap analysis
+          with priority actions — using your own Gemini API key, no subscription needed.
+        </p>
+        <Button
+          onClick={handleGoogleLogin}
+          size="lg"
+          className="bg-blue-500 hover:bg-blue-600 text-white px-8 py-6 text-lg"
         >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+          Get Started Free →
+        </Button>
+      </div>
+
+      {/* Features */}
+      <div className="max-w-4xl mx-auto px-6 pb-16 grid grid-cols-1 md:grid-cols-3 gap-6">
+        {[
+          {
+            icon: Target,
+            title: 'Precise Gap Analysis',
+            desc: 'See exactly which skills are missing and how important each one is',
+          },
+          {
+            icon: TrendingUp,
+            title: 'Priority Actions',
+            desc: 'Ranked list of what to fix first for maximum interview call rate',
+          },
+          {
+            icon: Zap,
+            title: 'Your API, Your Privacy',
+            desc: "Use your own Gemini key. Your resume never leaves your browser.",
+          },
+        ].map(({ icon: Icon, title, desc }) => (
+          <div key={title} className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">
+            <Icon className="w-8 h-8 text-blue-400 mb-4" />
+            <h3 className="font-semibold text-lg mb-2">{title}</h3>
+            <p className="text-slate-400 text-sm">{desc}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* How it works */}
+      <div className="max-w-4xl mx-auto px-6 pb-24 text-center">
+        <h2 className="text-2xl font-bold mb-10 text-slate-300">How it works</h2>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {[
+            { step: '1', text: 'Sign in with Google' },
+            { step: '2', text: 'Connect your free Gemini API key' },
+            { step: '3', text: 'Upload resume + paste job description' },
+            { step: '4', text: 'Get your gap analysis instantly' },
+          ].map(({ step, text }) => (
+            <div key={step} className="flex flex-col items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-blue-500/20 border border-blue-500/40 flex items-center justify-center text-blue-400 font-bold">
+                {step}
+              </div>
+              <p className="text-slate-400 text-sm">{text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
-  );
+  )
 }
