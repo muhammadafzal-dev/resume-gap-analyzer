@@ -107,70 +107,115 @@ export default function DashboardPage() {
         </div>
       </nav>
 
-      <div className="flex-1 overflow-hidden max-w-6xl w-full mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
-          {/* Input Panel */}
-          <div className="space-y-5 overflow-y-auto pr-1">
-            <h1 className="text-2xl font-bold">Analyze Your Resume</h1>
+      <div className="flex-1 overflow-hidden max-w-6xl w-full mx-auto px-6 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
 
-            <div>
-              <Label className="text-slate-300 mb-2 block">Resume (PDF)</Label>
+          {/* ── Input Panel ── */}
+          <div className="overflow-y-auto pr-1 space-y-4">
+            {/* Heading */}
+            <div className="mb-2">
+              <h1 className="text-2xl font-bold text-white">Analyze Your Resume</h1>
+              <p className="text-slate-400 text-sm mt-1">
+                Get an AI-powered gap analysis with priority actions in seconds.
+              </p>
+            </div>
+
+            {/* Step 1 */}
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="w-5 h-5 rounded-full bg-blue-500/20 border border-blue-500/40 text-blue-400 text-xs font-bold flex items-center justify-center">1</span>
+                <span className="text-sm font-medium text-slate-300">Upload Resume</span>
+                {resumeText && <span className="ml-auto text-xs text-green-400 font-medium">✓ Ready</span>}
+              </div>
               <ResumeUpload onExtracted={(text) => setResumeText(text)} />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <Label className="text-slate-300 mb-2 block">Job Title</Label>
-                <JobTitleInput value={jobTitle} onChange={setJobTitle} />
+            {/* Step 2 */}
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="w-5 h-5 rounded-full bg-blue-500/20 border border-blue-500/40 text-blue-400 text-xs font-bold flex items-center justify-center">2</span>
+                <span className="text-sm font-medium text-slate-300">Job Details</span>
+              </div>
+              <div className="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                  <Label className="text-xs text-slate-400 mb-1.5 block">Job Title</Label>
+                  <JobTitleInput value={jobTitle} onChange={setJobTitle} />
+                </div>
+                <div>
+                  <Label className="text-xs text-slate-400 mb-1.5 block">Company <span className="text-slate-600">(optional)</span></Label>
+                  <Input
+                    placeholder="e.g. Stripe"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    className="bg-slate-800 border-slate-700 text-white"
+                  />
+                </div>
               </div>
               <div>
-                <Label className="text-slate-300 mb-2 block">Company (optional)</Label>
-                <Input
-                  placeholder="e.g. Stripe"
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
-                  className="bg-slate-800 border-slate-600 text-white"
+                <Label className="text-xs text-slate-400 mb-1.5 block">Job Description</Label>
+                <Textarea
+                  placeholder="Paste the full job description here..."
+                  value={jobDescription}
+                  onChange={(e) => setJobDescription(e.target.value)}
+                  className="bg-slate-800 border-slate-700 text-white min-h-[160px] text-sm"
                 />
               </div>
             </div>
 
-            <div>
-              <Label className="text-slate-300 mb-2 block">Job Description</Label>
-              <Textarea
-                placeholder="Paste the full job description here..."
-                value={jobDescription}
-                onChange={(e) => setJobDescription(e.target.value)}
-                className="bg-slate-800 border-slate-600 text-white min-h-[200px]"
-              />
+            {/* Step 3 — Analyze */}
+            <div className="bg-slate-900 border border-slate-800 rounded-xl p-4">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="w-5 h-5 rounded-full bg-blue-500/20 border border-blue-500/40 text-blue-400 text-xs font-bold flex items-center justify-center">3</span>
+                <span className="text-sm font-medium text-slate-300">Run Analysis</span>
+              </div>
+              <Button
+                onClick={handleAnalyze}
+                disabled={isAnalyzing || !resumeText || !jobDescription}
+                className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 text-white font-semibold shadow-lg shadow-blue-500/20 disabled:opacity-40 disabled:shadow-none"
+                size="lg"
+              >
+                {isAnalyzing
+                  ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Analyzing your resume…</>
+                  : '✦ Analyze Gap →'
+                }
+              </Button>
+              {(!resumeText || !jobDescription) && (
+                <p className="text-xs text-slate-600 text-center mt-2">
+                  {!resumeText ? 'Upload a resume to continue' : 'Paste a job description to continue'}
+                </p>
+              )}
             </div>
-
-            <Button
-              onClick={handleAnalyze}
-              disabled={isAnalyzing || !resumeText || !jobDescription}
-              className="w-full bg-blue-500 hover:bg-blue-600"
-              size="lg"
-            >
-              {isAnalyzing && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-              {isAnalyzing ? 'Analyzing...' : 'Analyze Gap →'}
-            </Button>
           </div>
 
-          {/* Result Panel */}
+          {/* ── Result Panel ── */}
           <div ref={resultRef} className="overflow-y-auto pr-1">
             {result ? (
               <AnalysisResultView result={result} />
             ) : (
-              <div className="h-full flex items-center justify-center text-slate-500 border-2 border-dashed border-slate-700 rounded-xl p-12 text-center min-h-[400px]">
+              <div className="h-full min-h-[400px] rounded-xl border border-slate-800 bg-slate-900/50 flex flex-col items-center justify-center text-center p-10 gap-6">
+                {/* Glow blob */}
+                <div className="w-20 h-20 rounded-2xl bg-slate-800 border border-slate-700 flex items-center justify-center mb-2">
+                  <FileText className="w-9 h-9 text-slate-600" />
+                </div>
                 <div>
-                  <FileText className="w-12 h-12 mx-auto mb-4 opacity-30" />
-                  <p>Your analysis results will appear here</p>
-                  <p className="text-xs mt-2 text-slate-600">
-                    Upload a resume and paste a job description to get started
-                  </p>
+                  <p className="text-slate-300 font-semibold text-lg">Your analysis will appear here</p>
+                  <p className="text-slate-500 text-sm mt-1">Complete the steps on the left to get started</p>
+                </div>
+                {/* Preview chips */}
+                <div className="flex flex-wrap justify-center gap-2 max-w-xs">
+                  {['Match Score', 'Missing Skills', 'Weak Areas', 'Priority Actions', 'Resume Edits', 'Strengths'].map((label) => (
+                    <span
+                      key={label}
+                      className="text-xs px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-slate-500"
+                    >
+                      {label}
+                    </span>
+                  ))}
                 </div>
               </div>
             )}
           </div>
+
         </div>
       </div>
     </div>
