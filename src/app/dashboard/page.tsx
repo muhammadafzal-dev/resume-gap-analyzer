@@ -42,6 +42,10 @@ export default function DashboardPage() {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleAnalyze = async () => {
+    if (!apiKey) {
+      toast.error('Gemini API key not found. Please update it in your profile settings.')
+      return
+    }
     if (!resumeText || !jobDescription) {
       toast.error('Please upload your resume and paste the job description')
       return

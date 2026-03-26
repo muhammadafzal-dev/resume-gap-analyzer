@@ -1,5 +1,5 @@
-import { GoogleGenerativeAI } from '@google/generative-ai'
-import type { AnalysisResult } from './types'
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import type { AnalysisResult } from "./types";
 
 const buildPrompt = (resumeText: string, jobDescription: string) => `
 You are an expert career coach and ATS specialist. Analyze this resume against the job description.
@@ -28,31 +28,33 @@ Return ONLY a valid JSON object with this exact structure (no markdown, no expla
     {"section": "<section name>", "current": "<current text or description>", "suggested": "<improved version>"}
   ]
 }
-`
+`;
 
 export async function analyzeResume(
   apiKey: string,
   resumeText: string,
-  jobDescription: string
+  jobDescription: string,
 ): Promise<AnalysisResult> {
-  const genAI = new GoogleGenerativeAI(apiKey)
-  const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
+  const genAI = new GoogleGenerativeAI(apiKey);
+  const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-  const result = await model.generateContent(buildPrompt(resumeText, jobDescription))
-  const text = result.response.text().trim()
+  const result = await model.generateContent(
+    buildPrompt(resumeText, jobDescription),
+  );
+  const text = result.response.text().trim();
 
   // Strip markdown code blocks if Gemini wraps the response
-  const jsonText = text.replace(/^```json?\n?/, '').replace(/\n?```$/, '')
-  return JSON.parse(jsonText) as AnalysisResult
+  const jsonText = text.replace(/^```json?\n?/, "").replace(/\n?```$/, "");
+  return JSON.parse(jsonText) as AnalysisResult;
 }
 
 export async function testApiKey(apiKey: string): Promise<boolean> {
   try {
-    const genAI = new GoogleGenerativeAI(apiKey)
-    const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' })
-    await model.generateContent('Say "ok"')
-    return true
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+    await model.generateContent('Say "ok"');
+    return true;
   } catch {
-    return false
+    return false;
   }
 }
