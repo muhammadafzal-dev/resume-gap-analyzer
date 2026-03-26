@@ -54,6 +54,23 @@ export default function DashboardPage() {
       toast.error('Please upload your resume and paste the job description')
       return
     }
+    // Rate limit: max 20 analyses per hour
+    const {
+      data: { user: currentUser },
+    } = await supabase.auth.getUser()
+    if (currentUser) {
+      const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString()
+      const { count } = await supabase
+        .from('analyses')
+        .select('*', { count: 'exact', head: true })
+        .eq('user_id', currentUser.id)
+        .gte('created_at', oneHourAgo)
+      if ((count ?? 0) >= 20) {
+        toast.error('Rate limit reached: max 20 analyses per hour. Please wait before trying again.')
+        return
+      }
+    }
+
     setIsAnalyzing(true)
     setResult(null)
     try {
