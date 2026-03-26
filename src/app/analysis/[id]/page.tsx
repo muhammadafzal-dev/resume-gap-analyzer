@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { AnalysisResultView } from '@/components/analysis-result'
+import { DeleteAnalysisButton } from '@/components/delete-analysis-button'
 import Link from 'next/link'
 import type { AnalysisResult } from '@/lib/types'
 
@@ -40,9 +41,12 @@ export default async function AnalysisPage({ params }: { params: { id: string } 
               })}
             </p>
           </div>
-          <Link href="/history" className="text-blue-400 hover:underline text-sm">
-            ← History
-          </Link>
+          <div className="flex items-center gap-3">
+            <DeleteAnalysisButton id={analysis.id} redirectTo="/history" />
+            <Link href="/history" className="text-blue-400 hover:underline text-sm">
+              ← History
+            </Link>
+          </div>
         </div>
         <AnalysisResultView result={analysis.analysis_result as AnalysisResult} />
       </div>

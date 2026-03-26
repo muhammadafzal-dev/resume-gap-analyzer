@@ -6,7 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
 
-export function DeleteAnalysisButton({ id }: { id: string }) {
+export function DeleteAnalysisButton({ id, redirectTo }: { id: string; redirectTo?: string }) {
   const [confirming, setConfirming] = useState(false)
   const router = useRouter()
   const supabase = createClient()
@@ -27,12 +27,23 @@ export function DeleteAnalysisButton({ id }: { id: string }) {
       return
     }
     toast.success('Analysis deleted')
-    router.refresh()
+    if (redirectTo) {
+      router.push(redirectTo)
+    } else {
+      router.refresh()
+    }
+  }
+
+  const stopAll = (e: React.SyntheticEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
   }
 
   return (
     <button
       onClick={handleClick}
+      onPointerDown={stopAll}
+      onMouseDown={stopAll}
       title={confirming ? 'Click again to confirm delete' : 'Delete'}
       className={`p-1.5 rounded-lg transition-all ${
         confirming
