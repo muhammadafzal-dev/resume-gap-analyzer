@@ -1,8 +1,9 @@
 export async function extractTextFromPDF(file: File): Promise<string> {
-  const pdfjsLib = await import('pdfjs-dist')
+  // Use legacy build — more compatible with Next.js/webpack bundling
+  const pdfjsLib = await import('pdfjs-dist/legacy/build/pdf.mjs')
 
-  // Use CDN worker to avoid bundling issues
-  pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`
+  // Use CDN worker to avoid webpack bundling the worker file
+  pdfjsLib.GlobalWorkerOptions.workerSrc = `https://cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.mjs`
 
   const arrayBuffer = await file.arrayBuffer()
   const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise
