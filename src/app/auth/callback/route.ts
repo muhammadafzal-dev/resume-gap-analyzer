@@ -8,7 +8,24 @@ export async function GET(request: Request) {
   if (code) {
     const supabase = createClient()
     await supabase.auth.exchangeCodeForSession(code)
+
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (user) {
+      await supabase
+        .from('profiles')
+        .upsert({ id: user.id }, { onConflict: 'id', ignoreDuplicates: true })
+
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('onboarding_completed')
+        .eq('id', user.id)
+        .single()
+
+      const redirectTo = profile?.onboarding_completed ? '/dashboard' : '/onboarding'
+      return NextResponse.redirect(`${origin}${redirectTo}`)
+    }
   }
 
-  return NextResponse.redirect(`${origin}/dashboard`)
+  return NextResponse.redirect(`${origin}/`)
 }

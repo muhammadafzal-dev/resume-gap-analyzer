@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Loader2, History, LogOut, Settings, FileText } from 'lucide-react'
+import { Loader2, History, LogOut, Settings, FileText, AlertCircle } from 'lucide-react'
 import { Logo } from '@/components/logo'
 import { toast } from 'sonner'
 import type { AnalysisResult } from '@/lib/types'
@@ -26,6 +26,7 @@ export default function DashboardPage() {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [result, setResult] = useState<AnalysisResult | null>(null)
   const [apiKey, setApiKey] = useState('')
+  const [showSignOutConfirm, setShowSignOutConfirm] = useState(false)
   const resultRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -86,6 +87,8 @@ export default function DashboardPage() {
     router.push('/')
   }
 
+  const handleSignOutClick = () => setShowSignOutConfirm(true)
+
   return (
     <div className="h-screen flex flex-col bg-slate-950 text-white overflow-hidden">
       {/* Nav */}
@@ -101,7 +104,7 @@ export default function DashboardPage() {
           <Button variant="ghost" size="sm" onClick={() => router.push('/settings')}>
             <Settings className="w-4 h-4 mr-2" /> Settings
           </Button>
-          <Button variant="ghost" size="sm" onClick={handleSignOut}>
+          <Button variant="ghost" size="sm" onClick={handleSignOutClick}>
             <LogOut className="w-4 h-4 mr-2" /> Sign out
           </Button>
         </div>
@@ -218,6 +221,39 @@ export default function DashboardPage() {
 
         </div>
       </div>
+
+      {/* Sign out confirmation modal */}
+      {showSignOutConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setShowSignOutConfirm(false)} />
+          <div className="relative bg-slate-900 border border-slate-700 rounded-2xl p-6 w-full max-w-sm mx-4 shadow-2xl">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0">
+                <AlertCircle className="w-5 h-5 text-red-400" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-white">Sign out?</h3>
+                <p className="text-slate-400 text-sm">You&apos;ll be returned to the home page.</p>
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <Button
+                variant="ghost"
+                className="flex-1 border border-slate-700 hover:bg-slate-800"
+                onClick={() => setShowSignOutConfirm(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                className="flex-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20"
+                onClick={handleSignOut}
+              >
+                <LogOut className="w-4 h-4 mr-2" /> Sign out
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

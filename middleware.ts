@@ -31,11 +31,25 @@ export async function middleware(request: NextRequest) {
   const protectedRoutes = ['/dashboard', '/history', '/onboarding', '/analysis', '/settings']
   const isProtected = protectedRoutes.some((r) => url.pathname.startsWith(r))
 
+  // Redirect unauthenticated users away from protected routes
   if (isProtected && !user) {
     url.pathname = '/'
     return NextResponse.redirect(url)
   }
 
+  // Redirect logged-in users away from the landing page
+  if (user && url.pathname === '/') {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('onboarding_completed')
+      .eq('id', user.id)
+      .single()
+
+    url.pathname = profile?.onboarding_completed ? '/dashboard' : '/onboarding'
+    return NextResponse.redirect(url)
+  }
+
+  // Redirect to onboarding if not completed (or profile not created yet)
   if (user && url.pathname === '/dashboard') {
     const { data: profile } = await supabase
       .from('profiles')
@@ -43,7 +57,7 @@ export async function middleware(request: NextRequest) {
       .eq('id', user.id)
       .single()
 
-    if (profile && !profile.onboarding_completed) {
+    if (!profile?.onboarding_completed) {
       url.pathname = '/onboarding'
       return NextResponse.redirect(url)
     }
