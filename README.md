@@ -169,4 +169,9 @@ Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines
 
 ## License
 
-MIT — see [LICENSE](LICENSE) for details.
+**Source Available — All Rights Reserved**
+
+Source code is public for viewing and educational reference only.
+Commercial use, redistribution, derivative works, and forking for deployment are **not permitted** without explicit written permission.
+
+See [LICENSE](LICENSE) for full terms.
