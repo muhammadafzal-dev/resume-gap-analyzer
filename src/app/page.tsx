@@ -72,7 +72,7 @@ export default function LandingPage() {
           {
             icon: Zap,
             title: 'Your API, Your Privacy',
-            desc: "Use your own Gemini key. Your resume never leaves your browser.",
+            desc: "Use your own Gemini key. We never store your resume — analysis goes directly to Gemini via your key.",
           },
         ].map(({ icon: Icon, title, desc }) => (
           <div key={title} className="bg-slate-800/50 border border-slate-700 rounded-xl p-6">

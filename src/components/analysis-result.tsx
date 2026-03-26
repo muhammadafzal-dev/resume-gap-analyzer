@@ -1,10 +1,29 @@
 'use client'
+import { useState } from 'react'
 import type { AnalysisResult } from '@/lib/types'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { CheckCircle } from 'lucide-react'
+import { CheckCircle, Copy, Check, AlertTriangle } from 'lucide-react'
+
+function CopyButton({ text }: { text: string }) {
+  const [copied, setCopied] = useState(false)
+  const handleCopy = () => {
+    navigator.clipboard.writeText(text)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+  return (
+    <button
+      onClick={handleCopy}
+      className="ml-auto text-slate-500 hover:text-slate-300 transition-colors"
+      title="Copy to clipboard"
+    >
+      {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+    </button>
+  )
+}
 
 const importanceVariant: Record<string, 'destructive' | 'secondary' | 'outline'> = {
   high: 'destructive',
@@ -46,6 +65,7 @@ export function AnalysisResultView({ result }: { result: AnalysisResult }) {
         <TabsList className="bg-slate-800 border border-slate-700 w-full">
           <TabsTrigger value="actions" className="flex-1">Priority Actions</TabsTrigger>
           <TabsTrigger value="missing" className="flex-1">Missing Skills</TabsTrigger>
+          <TabsTrigger value="weak" className="flex-1">Weak Areas</TabsTrigger>
           <TabsTrigger value="improvements" className="flex-1">Resume Edits</TabsTrigger>
           <TabsTrigger value="strengths" className="flex-1">Strengths</TabsTrigger>
         </TabsList>
@@ -82,6 +102,27 @@ export function AnalysisResultView({ result }: { result: AnalysisResult }) {
           ))}
         </TabsContent>
 
+        <TabsContent value="weak" className="space-y-3 mt-4">
+          {result.weak_areas.map((w, i) => (
+            <Card key={i} className="bg-slate-800 border-slate-700">
+              <CardContent className="pt-4 pb-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <AlertTriangle className="w-4 h-4 text-yellow-400 shrink-0" />
+                  <span className="font-medium text-slate-200">{w.area}</span>
+                </div>
+                <div className="space-y-2">
+                  <div className="bg-red-500/10 border border-red-500/20 rounded p-3 text-sm text-slate-300">
+                    <span className="text-red-400 font-medium">Current: </span>{w.current}
+                  </div>
+                  <div className="bg-blue-500/10 border border-blue-500/20 rounded p-3 text-sm text-slate-300">
+                    <span className="text-blue-400 font-medium">Suggested: </span>{w.suggested}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </TabsContent>
+
         <TabsContent value="improvements" className="space-y-3 mt-4">
           {result.resume_improvements.map((imp, i) => (
             <Card key={i} className="bg-slate-800 border-slate-700">
@@ -93,9 +134,9 @@ export function AnalysisResultView({ result }: { result: AnalysisResult }) {
                   <span className="text-red-400 font-medium">Current: </span>
                   {imp.current}
                 </div>
-                <div className="bg-green-500/10 border border-green-500/20 rounded p-3 text-sm text-slate-300">
-                  <span className="text-green-400 font-medium">Suggested: </span>
-                  {imp.suggested}
+                <div className="bg-green-500/10 border border-green-500/20 rounded p-3 text-sm text-slate-300 flex items-start gap-2">
+                  <span className="shrink-0"><span className="text-green-400 font-medium">Suggested: </span>{imp.suggested}</span>
+                  <CopyButton text={imp.suggested} />
                 </div>
               </CardContent>
             </Card>

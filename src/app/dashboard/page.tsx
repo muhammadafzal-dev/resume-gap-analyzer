@@ -1,15 +1,16 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { analyzeResume } from '@/lib/gemini'
 import { ResumeUpload } from '@/components/resume-upload'
+import { JobTitleInput } from '@/components/job-title-input'
 import { AnalysisResultView } from '@/components/analysis-result'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Loader2, FileText, History, LogOut } from 'lucide-react'
+import { Loader2, FileText, History, LogOut, Settings } from 'lucide-react'
 import { toast } from 'sonner'
 import type { AnalysisResult } from '@/lib/types'
 
@@ -24,6 +25,7 @@ export default function DashboardPage() {
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [result, setResult] = useState<AnalysisResult | null>(null)
   const [apiKey, setApiKey] = useState('')
+  const resultRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     const loadApiKey = async () => {
@@ -55,6 +57,7 @@ export default function DashboardPage() {
     try {
       const analysisResult = await analyzeResume(apiKey, resumeText, jobDescription)
       setResult(analysisResult)
+      setTimeout(() => resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
 
       const {
         data: { user },
@@ -94,6 +97,9 @@ export default function DashboardPage() {
           <Button variant="ghost" size="sm" onClick={() => router.push('/history')}>
             <History className="w-4 h-4 mr-2" /> History
           </Button>
+          <Button variant="ghost" size="sm" onClick={() => router.push('/settings')}>
+            <Settings className="w-4 h-4 mr-2" /> Settings
+          </Button>
           <Button variant="ghost" size="sm" onClick={handleSignOut}>
             <LogOut className="w-4 h-4 mr-2" /> Sign out
           </Button>
@@ -114,12 +120,7 @@ export default function DashboardPage() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <Label className="text-slate-300 mb-2 block">Job Title</Label>
-                <Input
-                  placeholder="e.g. Senior Engineer"
-                  value={jobTitle}
-                  onChange={(e) => setJobTitle(e.target.value)}
-                  className="bg-slate-800 border-slate-600 text-white"
-                />
+                <JobTitleInput value={jobTitle} onChange={setJobTitle} />
               </div>
               <div>
                 <Label className="text-slate-300 mb-2 block">Company (optional)</Label>
@@ -154,7 +155,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Result Panel */}
-          <div>
+          <div ref={resultRef}>
             {result ? (
               <AnalysisResultView result={result} />
             ) : (
