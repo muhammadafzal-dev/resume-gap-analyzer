@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ArrowLeft, CheckCircle, XCircle, Loader2, ExternalLink } from 'lucide-react'
+import { ArrowLeft, CheckCircle, XCircle, Loader2, ExternalLink, AlertTriangle } from 'lucide-react'
 import { Logo } from '@/components/logo'
 import { toast } from 'sonner'
 
@@ -17,6 +17,8 @@ export default function SettingsPage() {
   const [apiKey, setApiKey] = useState('')
   const [newKey, setNewKey] = useState('')
   const [status, setStatus] = useState<'idle' | 'testing' | 'saving' | 'success' | 'error'>('idle')
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [deleting, setDeleting] = useState(false)
 
   useEffect(() => {
     const load = async () => {
@@ -56,6 +58,20 @@ export default function SettingsPage() {
   }
 
   const maskedKey = apiKey ? `${apiKey.slice(0, 8)}${'•'.repeat(20)}` : 'Not set'
+
+  const handleDeleteAccount = async () => {
+    setDeleting(true)
+    try {
+      const res = await fetch('/api/delete-account', { method: 'DELETE' })
+      if (!res.ok) throw new Error('Failed')
+      await supabase.auth.signOut()
+      router.push('/')
+    } catch {
+      toast.error('Failed to delete account. Please try again.')
+      setDeleting(false)
+      setShowDeleteConfirm(false)
+    }
+  }
 
   return (
     <div className="min-h-screen bg-slate-950 text-white">
@@ -118,7 +134,62 @@ export default function SettingsPage() {
             )}
           </CardContent>
         </Card>
+        {/* Danger Zone */}
+        <Card className="bg-slate-900 border-red-500/20 mt-6">
+          <CardHeader>
+            <CardTitle className="text-red-400 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4" /> Danger Zone
+            </CardTitle>
+            <CardDescription className="text-slate-400">
+              Permanently delete your account and all data. This cannot be undone.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Button
+              variant="ghost"
+              onClick={() => setShowDeleteConfirm(true)}
+              className="border border-red-500/20 text-red-400 hover:bg-red-500/10 hover:text-red-300"
+            >
+              Delete Account
+            </Button>
+          </CardContent>
+        </Card>
       </div>
+
+      {/* Delete account confirmation modal */}
+      {showDeleteConfirm && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => !deleting && setShowDeleteConfirm(false)} />
+          <div className="relative bg-slate-900 border border-slate-700 rounded-2xl p-6 w-full max-w-sm mx-4 shadow-2xl">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center shrink-0">
+                <AlertTriangle className="w-5 h-5 text-red-400" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-white">Delete account?</h3>
+                <p className="text-slate-400 text-sm">All analyses and data will be permanently removed.</p>
+              </div>
+            </div>
+            <div className="flex gap-3 mt-4">
+              <button
+                onClick={() => setShowDeleteConfirm(false)}
+                disabled={deleting}
+                className="flex-1 border border-slate-700 hover:bg-slate-800 text-slate-300 text-sm font-medium py-2 rounded-lg transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDeleteAccount}
+                disabled={deleting}
+                className="flex-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-500/20 text-sm font-medium py-2 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+              >
+                {deleting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                Delete Account
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
