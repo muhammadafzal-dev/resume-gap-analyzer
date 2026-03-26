@@ -1,6 +1,5 @@
 'use client'
 import { createClient } from '@/lib/supabase/client'
-import { Button } from '@/components/ui/button'
 import { Logo } from '@/components/logo'
 import { Zap, Target, TrendingUp, Key, PenLine, CheckCircle, ArrowRight } from 'lucide-react'
 
