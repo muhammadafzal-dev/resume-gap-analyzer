@@ -7,7 +7,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { FileText, ArrowLeft, CheckCircle, XCircle, Loader2, ExternalLink } from 'lucide-react'
+import { ArrowLeft, CheckCircle, XCircle, Loader2, ExternalLink } from 'lucide-react'
+import { Logo } from '@/components/logo'
 import { toast } from 'sonner'
 
 export default function SettingsPage() {
@@ -60,7 +61,7 @@ export default function SettingsPage() {
     <div className="min-h-screen bg-slate-950 text-white">
       <nav className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
         <div className="flex items-center gap-2">
-          <FileText className="w-5 h-5 text-blue-400" />
+          <Logo size={28} />
           <span className="font-bold">ResumeGap</span>
         </div>
         <Button variant="ghost" size="sm" onClick={() => router.push('/dashboard')}>

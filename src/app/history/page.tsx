@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { FileText, ArrowRight } from 'lucide-react'
+import { Logo } from '@/components/logo'
 
 export default async function HistoryPage() {
   const supabase = createClient()
@@ -25,7 +26,7 @@ export default async function HistoryPage() {
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <FileText className="w-6 h-6 text-blue-400" />
+            <Logo size={28} />
             <h1 className="text-2xl font-bold">Analysis History</h1>
           </div>
           <Link href="/dashboard" className="text-blue-400 hover:underline text-sm">

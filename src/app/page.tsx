@@ -2,7 +2,8 @@
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { FileText, Zap, Target, TrendingUp } from 'lucide-react'
+import { Zap, Target, TrendingUp } from 'lucide-react'
+import { Logo } from '@/components/logo'
 
 export default function LandingPage() {
   const supabase = createClient()
@@ -21,7 +22,7 @@ export default function LandingPage() {
       {/* Nav */}
       <nav className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
         <div className="flex items-center gap-2">
-          <FileText className="w-6 h-6 text-blue-400" />
+          <Logo size={32} />
           <span className="font-bold text-lg">ResumeGap</span>
         </div>
         <Button

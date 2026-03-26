@@ -10,7 +10,8 @@ import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Loader2, FileText, History, LogOut, Settings } from 'lucide-react'
+import { Loader2, History, LogOut, Settings, FileText } from 'lucide-react'
+import { Logo } from '@/components/logo'
 import { toast } from 'sonner'
 import type { AnalysisResult } from '@/lib/types'
 
@@ -90,7 +91,7 @@ export default function DashboardPage() {
       {/* Nav */}
       <nav className="flex-shrink-0 flex items-center justify-between px-6 py-4 border-b border-slate-800">
         <div className="flex items-center gap-2">
-          <FileText className="w-5 h-5 text-blue-400" />
+          <Logo size={28} />
           <span className="font-bold">ResumeGap</span>
         </div>
         <div className="flex gap-2">
