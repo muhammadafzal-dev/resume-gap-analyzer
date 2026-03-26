@@ -77,7 +77,8 @@ export default async function HistoryPage() {
               const dash = (score / 100) * circ
 
               return (
-                <Link key={a.id} href={`/analysis/${a.id}`}>
+                <div key={a.id} className="relative">
+                <Link href={`/analysis/${a.id}`}>
                   <div className="group bg-slate-900 border border-slate-800 hover:border-slate-600 rounded-xl px-5 py-4 flex items-center gap-4 transition-all hover:bg-slate-800/60 cursor-pointer">
 
                     {/* Mini circular score */}
@@ -108,16 +109,20 @@ export default async function HistoryPage() {
                       </div>
                     </div>
 
-                    {/* Score badge + actions */}
+                    {/* Score badge + arrow */}
                     <div className="flex items-center gap-2 shrink-0">
                       <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${scoreBg}`}>
                         {scoreLabel} match
                       </span>
-                      <DeleteAnalysisButton id={a.id} />
                       <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-slate-400 transition-colors" />
                     </div>
                   </div>
                 </Link>
+                {/* Delete button outside Link to prevent navigation conflict */}
+                <div className="absolute right-12 top-1/2 -translate-y-1/2">
+                  <DeleteAnalysisButton id={a.id} />
+                </div>
+                </div>
               )
             })}
           </div>
