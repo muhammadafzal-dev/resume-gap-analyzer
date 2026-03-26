@@ -21,24 +21,42 @@ function CopyButton({ text }: { text: string }) {
   )
 }
 
-function KeywordChip({ keyword, className, dot }: { keyword: string; className: string; dot?: boolean }) {
+function KeywordChip({ keyword, className, dot, tooltip }: {
+  keyword: string
+  className: string
+  dot?: boolean
+  tooltip?: string
+}) {
   const [copied, setCopied] = useState(false)
+  const [showTip, setShowTip] = useState(false)
+
   const handleCopy = () => {
     navigator.clipboard.writeText(keyword)
     setCopied(true)
+    setShowTip(false)
     setTimeout(() => setCopied(false), 1500)
   }
+
   return (
-    <button
-      onClick={handleCopy}
-      title="Click to copy"
-      className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border font-medium transition-all active:scale-95 hover:brightness-125 cursor-pointer ${className}`}
-    >
-      {copied
-        ? <><Check className="w-3 h-3 shrink-0" /> Copied!</>
-        : <>{dot && <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70 shrink-0" />}{keyword}</>
-      }
-    </button>
+    <div className="relative">
+      <button
+        onClick={handleCopy}
+        onMouseEnter={() => setShowTip(true)}
+        onMouseLeave={() => setShowTip(false)}
+        className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border font-medium transition-all active:scale-95 hover:brightness-125 cursor-pointer ${className}`}
+      >
+        {copied
+          ? <><Check className="w-3 h-3 shrink-0" /> Copied!</>
+          : <>{dot && <span className="w-1.5 h-1.5 rounded-full bg-current opacity-70 shrink-0" />}{keyword}</>
+        }
+      </button>
+      {showTip && tooltip && (
+        <div className="absolute bottom-full left-0 mb-2 z-50 w-max max-w-[220px] bg-slate-800 border border-slate-600 text-slate-200 text-xs rounded-lg px-3 py-2 shadow-xl pointer-events-none leading-relaxed">
+          {tooltip}
+          <div className="absolute top-full left-4 border-4 border-transparent border-t-slate-600" />
+        </div>
+      )}
+    </div>
   )
 }
 
@@ -174,7 +192,23 @@ export function AnalysisResultView({ result }: { result: AnalysisResult }) {
 
         {/* ATS Keywords */}
         <TabsContent value="ats" className="mt-3 space-y-4">
-          <p className="text-xs text-slate-500">Click any missing keyword to copy it to clipboard.</p>
+          {/* Legend */}
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <p className="text-xs text-slate-500">Click a missing keyword to copy it.</p>
+            <div className="flex items-center gap-3">
+              {[
+                { color: 'bg-red-400', label: 'Must have' },
+                { color: 'bg-yellow-400', label: 'Important' },
+                { color: 'bg-slate-400', label: 'Nice to have' },
+              ].map(({ color, label }) => (
+                <div key={label} className="flex items-center gap-1.5">
+                  <span className={`w-2 h-2 rounded-full ${color}`} />
+                  <span className="text-xs text-slate-500">{label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
           {missingKeywords.length > 0 && (
             <div>
               <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2">
@@ -182,7 +216,13 @@ export function AnalysisResultView({ result }: { result: AnalysisResult }) {
               </p>
               <div className="flex flex-wrap gap-2">
                 {missingKeywords.map((k) => (
-                  <KeywordChip key={k.keyword} keyword={k.keyword} className={importanceBadge[k.importance]} dot />
+                  <KeywordChip
+                    key={k.keyword}
+                    keyword={k.keyword}
+                    className={importanceBadge[k.importance]}
+                    tooltip={k.importance === 'high' ? 'Must have — ATS will likely reject without this' : k.importance === 'medium' ? 'Important — add if you have this skill' : 'Nice to have — adds value if relevant'}
+                    dot
+                  />
                 ))}
               </div>
             </div>
