@@ -28,9 +28,9 @@ export default async function HistoryPage() {
         </div>
         <Link
           href="/dashboard"
-          className="flex items-center gap-1.5 text-sm bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg transition-colors font-medium"
+          className="flex items-center gap-1.5 text-sm bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 border border-blue-500/20 px-3 py-1.5 rounded-lg transition-colors font-medium"
         >
-          <Plus className="w-4 h-4" /> New Analysis
+          <Plus className="w-3.5 h-3.5" /> <span className="hidden sm:inline">New Analysis</span><span className="sm:hidden">New</span>
         </Link>
       </nav>
 
