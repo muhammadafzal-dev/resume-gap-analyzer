@@ -107,31 +107,31 @@ export default function DashboardPage() {
   const handleSignOutClick = () => setShowSignOutConfirm(true)
 
   return (
-    <div className="h-screen flex flex-col bg-slate-950 text-white overflow-hidden">
+    <div className="min-h-screen lg:h-screen flex flex-col bg-slate-950 text-white lg:overflow-hidden">
       {/* Nav */}
-      <nav className="flex-shrink-0 flex items-center justify-between px-6 py-4 border-b border-slate-800">
+      <nav className="flex-shrink-0 flex items-center justify-between px-4 sm:px-6 py-4 border-b border-slate-800">
         <div className="flex items-center gap-2">
           <Logo size={28} />
           <span className="font-bold">ResumeGap</span>
         </div>
-        <div className="flex gap-2">
-          <Button variant="ghost" size="sm" onClick={() => router.push('/history')}>
-            <History className="w-4 h-4 mr-2" /> History
+        <div className="flex gap-1 sm:gap-2">
+          <Button variant="ghost" size="sm" onClick={() => router.push('/history')} className="px-2 sm:px-3">
+            <History className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">History</span>
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => router.push('/settings')}>
-            <Settings className="w-4 h-4 mr-2" /> Settings
+          <Button variant="ghost" size="sm" onClick={() => router.push('/settings')} className="px-2 sm:px-3">
+            <Settings className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Settings</span>
           </Button>
-          <Button variant="ghost" size="sm" onClick={handleSignOutClick}>
-            <LogOut className="w-4 h-4 mr-2" /> Sign out
+          <Button variant="ghost" size="sm" onClick={handleSignOutClick} className="px-2 sm:px-3">
+            <LogOut className="w-4 h-4 sm:mr-2" /> <span className="hidden sm:inline">Sign out</span>
           </Button>
         </div>
       </nav>
 
-      <div className="flex-1 overflow-hidden max-w-6xl w-full mx-auto px-6 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 h-full">
+      <div className="flex-1 lg:overflow-hidden max-w-6xl w-full mx-auto px-4 sm:px-6 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:h-full">
 
           {/* ── Input Panel ── */}
-          <div className="overflow-y-auto pr-1 space-y-4">
+          <div className="lg:overflow-y-auto lg:pr-1 space-y-4">
             {/* Heading */}
             <div className="mb-2">
               <h1 className="text-2xl font-bold text-white">Analyze Your Resume</h1>
@@ -208,7 +208,7 @@ export default function DashboardPage() {
           </div>
 
           {/* ── Result Panel ── */}
-          <div ref={resultRef} className="overflow-y-auto pr-1">
+          <div ref={resultRef} className="lg:overflow-y-auto lg:pr-1">
             {result ? (
               <AnalysisResultView result={result} />
             ) : (
