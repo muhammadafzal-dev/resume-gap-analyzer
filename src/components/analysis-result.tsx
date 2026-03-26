@@ -4,7 +4,7 @@ import type { AnalysisResult } from '@/lib/types'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   CheckCircle, Copy, Check, AlertTriangle,
-  Zap, BookOpen, Target, TrendingUp, Key, PenLine, Clock
+  Zap, BookOpen, Target, TrendingUp, Key, PenLine, Clock, Download
 } from 'lucide-react'
 
 function CopyButton({ text }: { text: string }) {
@@ -92,7 +92,17 @@ export function AnalysisResultView({ result }: { result: AnalysisResult }) {
   const foundKeywords = result.ats_keywords?.filter((k) => k.found) ?? []
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 print:space-y-6">
+
+      {/* ── Export button ── */}
+      <div className="flex justify-end print:hidden">
+        <button
+          onClick={() => window.print()}
+          className="flex items-center gap-2 text-xs text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 px-3 py-1.5 rounded-lg transition-all"
+        >
+          <Download className="w-3.5 h-3.5" /> Save as PDF
+        </button>
+      </div>
 
       {/* ── Score Card ── */}
       <div className={`rounded-xl border bg-gradient-to-br ${scoreBg} p-5`}>

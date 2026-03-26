@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { FileText, ArrowRight, Plus, Building2, Calendar } from 'lucide-react'
 import { Logo } from '@/components/logo'
+import { DeleteAnalysisButton } from '@/components/delete-analysis-button'
 
 export default async function HistoryPage() {
   const supabase = createClient()
@@ -107,11 +108,12 @@ export default async function HistoryPage() {
                       </div>
                     </div>
 
-                    {/* Score badge + arrow */}
-                    <div className="flex items-center gap-3 shrink-0">
+                    {/* Score badge + actions */}
+                    <div className="flex items-center gap-2 shrink-0">
                       <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${scoreBg}`}>
                         {scoreLabel} match
                       </span>
+                      <DeleteAnalysisButton id={a.id} />
                       <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-slate-400 transition-colors" />
                     </div>
                   </div>
