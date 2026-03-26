@@ -108,18 +108,15 @@ export default async function HistoryPage() {
                       </div>
                     </div>
 
-                    {/* Score badge + arrow */}
-                    <div className="hidden sm:flex items-center gap-2 shrink-0">
-                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${scoreBg}`}>
-                        {scoreLabel} match
-                      </span>
-                      <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-slate-400 transition-colors" />
-                    </div>
-                    <ArrowRight className="sm:hidden w-4 h-4 text-slate-600 group-hover:text-slate-400 transition-colors shrink-0" />
+                    {/* Score badge */}
+                    <span className={`hidden sm:inline-flex text-xs font-semibold px-2.5 py-1 rounded-full border shrink-0 ${scoreBg}`}>
+                      {scoreLabel} match
+                    </span>
                   </Link>
-                  {/* Delete button inside card, outside Link */}
-                  <div className="pr-3 shrink-0">
+                  {/* Delete + arrow at far right */}
+                  <div className="flex items-center gap-1 pr-4 shrink-0">
                     <DeleteAnalysisButton id={a.id} />
+                    <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-slate-400 transition-colors" />
                   </div>
                 </div>
               )
