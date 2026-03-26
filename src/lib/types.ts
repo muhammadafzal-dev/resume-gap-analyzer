@@ -22,14 +22,35 @@ export interface ResumeImprovement {
   suggested: string
 }
 
+export interface AtsKeyword {
+  keyword: string
+  found: boolean
+  importance: 'high' | 'medium' | 'low'
+}
+
+export interface VerbImprovement {
+  original: string
+  improved: string
+  reason: string
+}
+
+export interface ExperienceGap {
+  required: string
+  actual: string
+  verdict: string
+}
+
 export interface AnalysisResult {
   overall_match_score: number
   summary: string
+  experience_gap: ExperienceGap | null
+  ats_keywords: AtsKeyword[]
   missing_skills: MissingSkill[]
   weak_areas: WeakArea[]
   strengths: string[]
   priority_actions: PriorityAction[]
   resume_improvements: ResumeImprovement[]
+  verb_improvements: VerbImprovement[]
 }
 
 export interface Analysis {
