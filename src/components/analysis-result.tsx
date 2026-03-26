@@ -134,9 +134,11 @@ export function AnalysisResultView({ result }: { result: AnalysisResult }) {
                   <span className="text-red-400 font-medium">Current: </span>
                   {imp.current}
                 </div>
-                <div className="bg-green-500/10 border border-green-500/20 rounded p-3 text-sm text-slate-300 flex items-start gap-2">
-                  <span className="shrink-0"><span className="text-green-400 font-medium">Suggested: </span>{imp.suggested}</span>
-                  <CopyButton text={imp.suggested} />
+                <div className="bg-green-500/10 border border-green-500/20 rounded p-3 text-sm text-slate-300">
+                  <div className="flex items-start justify-between gap-2">
+                    <span><span className="text-green-400 font-medium">Suggested: </span>{imp.suggested}</span>
+                    <CopyButton text={imp.suggested} />
+                  </div>
                 </div>
               </CardContent>
             </Card>

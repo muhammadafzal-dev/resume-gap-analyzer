@@ -86,9 +86,9 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white">
+    <div className="h-screen flex flex-col bg-slate-950 text-white overflow-hidden">
       {/* Nav */}
-      <nav className="flex items-center justify-between px-6 py-4 border-b border-slate-800">
+      <nav className="flex-shrink-0 flex items-center justify-between px-6 py-4 border-b border-slate-800">
         <div className="flex items-center gap-2">
           <FileText className="w-5 h-5 text-blue-400" />
           <span className="font-bold">ResumeGap</span>
@@ -106,10 +106,10 @@ export default function DashboardPage() {
         </div>
       </nav>
 
-      <div className="max-w-6xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div className="flex-1 overflow-hidden max-w-6xl w-full mx-auto px-6 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 h-full">
           {/* Input Panel */}
-          <div className="space-y-5">
+          <div className="space-y-5 overflow-y-auto pr-1">
             <h1 className="text-2xl font-bold">Analyze Your Resume</h1>
 
             <div>
@@ -155,7 +155,7 @@ export default function DashboardPage() {
           </div>
 
           {/* Result Panel */}
-          <div ref={resultRef}>
+          <div ref={resultRef} className="overflow-y-auto pr-1">
             {result ? (
               <AnalysisResultView result={result} />
             ) : (
