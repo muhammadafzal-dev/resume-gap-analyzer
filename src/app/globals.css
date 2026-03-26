@@ -20,25 +20,6 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-@media print {
-  /* Hide everything except the analysis result */
-  nav, header, footer,
-  [data-print-hide],
-  .print\:hidden {
-    display: none !important;
-  }
-
-  body {
-    background: white !important;
-    color: black !important;
-  }
-
-  /* Force backgrounds to print */
-  * {
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-  }
-}
 
 @layer utilities {
   .text-balance {
@@ -50,5 +31,18 @@ body {
   }
   .scrollbar-none::-webkit-scrollbar {
     display: none;
+  }
+  .no-print {
+    display: revert;
+  }
+}
+
+@media print {
+  nav, .no-print {
+    display: none !important;
+  }
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }

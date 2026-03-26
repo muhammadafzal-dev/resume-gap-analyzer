@@ -95,7 +95,7 @@ export function AnalysisResultView({ result }: { result: AnalysisResult }) {
     <div className="space-y-4 print:space-y-6">
 
       {/* ── Export button ── */}
-      <div className="flex justify-end print:hidden">
+      <div className="flex justify-end no-print">
         <button
           onClick={() => window.print()}
           className="flex items-center gap-2 text-xs text-slate-400 hover:text-white border border-slate-700 hover:border-slate-500 px-3 py-1.5 rounded-lg transition-all"
