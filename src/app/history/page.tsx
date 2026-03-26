@@ -77,51 +77,49 @@ export default async function HistoryPage() {
               const dash = (score / 100) * circ
 
               return (
-                <div key={a.id} className="relative">
-                <Link href={`/analysis/${a.id}`}>
-                  <div className="group bg-slate-900 border border-slate-800 hover:border-slate-600 rounded-xl px-5 py-4 flex items-center gap-4 transition-all hover:bg-slate-800/60 cursor-pointer">
+                <div key={a.id} className="flex items-center gap-2">
+                  <Link href={`/analysis/${a.id}`} className="flex-1 min-w-0">
+                    <div className="group bg-slate-900 border border-slate-800 hover:border-slate-600 rounded-xl px-5 py-4 flex items-center gap-4 transition-all hover:bg-slate-800/60 cursor-pointer">
 
-                    {/* Mini circular score */}
-                    <div className="relative shrink-0 w-10 h-10">
-                      <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
-                        <circle cx="18" cy="18" r={r} fill="none" stroke="#1e293b" strokeWidth="3" />
-                        <circle cx="18" cy="18" r={r} fill="none" stroke={scoreColor} strokeWidth="3"
-                          strokeLinecap="round" strokeDasharray={`${dash} ${circ}`} />
-                      </svg>
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="text-[9px] font-bold text-white">{score}%</span>
+                      {/* Mini circular score */}
+                      <div className="relative shrink-0 w-10 h-10">
+                        <svg className="w-10 h-10 -rotate-90" viewBox="0 0 36 36">
+                          <circle cx="18" cy="18" r={r} fill="none" stroke="#1e293b" strokeWidth="3" />
+                          <circle cx="18" cy="18" r={r} fill="none" stroke={scoreColor} strokeWidth="3"
+                            strokeLinecap="round" strokeDasharray={`${dash} ${circ}`} />
+                        </svg>
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <span className="text-[9px] font-bold text-white">{score}%</span>
+                        </div>
                       </div>
-                    </div>
 
-                    {/* Job info */}
-                    <div className="flex-1 min-w-0">
-                      <p className="font-semibold text-slate-100 truncate">{a.job_title}</p>
-                      <div className="flex items-center gap-3 mt-0.5">
-                        {a.company && (
+                      {/* Job info */}
+                      <div className="flex-1 min-w-0">
+                        <p className="font-semibold text-slate-100 truncate">{a.job_title}</p>
+                        <div className="flex items-center gap-3 mt-0.5">
+                          {a.company && (
+                            <span className="flex items-center gap-1 text-xs text-slate-500">
+                              <Building2 className="w-3 h-3" />{a.company}
+                            </span>
+                          )}
                           <span className="flex items-center gap-1 text-xs text-slate-500">
-                            <Building2 className="w-3 h-3" />{a.company}
+                            <Calendar className="w-3 h-3" />
+                            {new Date(a.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
                           </span>
-                        )}
-                        <span className="flex items-center gap-1 text-xs text-slate-500">
-                          <Calendar className="w-3 h-3" />
-                          {new Date(a.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                        </div>
+                      </div>
+
+                      {/* Score badge + arrow */}
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${scoreBg}`}>
+                          {scoreLabel} match
                         </span>
+                        <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-slate-400 transition-colors" />
                       </div>
                     </div>
-
-                    {/* Score badge + arrow */}
-                    <div className="flex items-center gap-2 shrink-0">
-                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full border ${scoreBg}`}>
-                        {scoreLabel} match
-                      </span>
-                      <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-slate-400 transition-colors" />
-                    </div>
-                  </div>
-                </Link>
-                {/* Delete button outside Link to prevent navigation conflict */}
-                <div className="absolute right-12 top-1/2 -translate-y-1/2">
+                  </Link>
+                  {/* Delete button as flex sibling — no overlap */}
                   <DeleteAnalysisButton id={a.id} />
-                </div>
                 </div>
               )
             })}
