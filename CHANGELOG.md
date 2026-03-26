@@ -6,12 +6,19 @@ All notable changes to ResumeGap are documented here.
 
 ## [Unreleased]
 
+---
+
+## [0.5.0] — 2025-03-26
+
 ### Added
 - Auth callback now upserts profile row as fallback when Supabase trigger doesn't fire
 - Auth callback redirects directly to `/onboarding` or `/dashboard` based on profile state
 
 ### Fixed
 - New users were landing on `/dashboard` instead of `/onboarding` after first sign-in
+
+### Deployed
+- Live at [resume-gap-analyzer-dev.vercel.app](https://resume-gap-analyzer-dev.vercel.app)
 
 ---
 

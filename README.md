@@ -2,6 +2,8 @@
 
 > Know exactly what's missing between you and the job.
 
+**Live:** [resume-gap-analyzer-dev.vercel.app](https://resume-gap-analyzer-dev.vercel.app)
+
 ResumeGap is an AI-powered resume gap analyzer. Upload your resume, paste any job description, and get a deep analysis — missing skills, ATS keywords, priority actions, verb rewrites, and more. Powered by **your own free Gemini API key**, so it costs nothing to run.
 
 ---
