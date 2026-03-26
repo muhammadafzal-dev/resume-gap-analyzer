@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import pdfParse from 'pdf-parse'
 
 export async function POST(request: Request) {
   try {
@@ -12,10 +11,14 @@ export async function POST(request: Request) {
 
     const arrayBuffer = await file.arrayBuffer()
     const buffer = Buffer.from(arrayBuffer)
+
+    // Dynamic import avoids Next.js bundling pdf-parse at build time
+    const pdfParse = (await import('pdf-parse')).default
     const data = await pdfParse(buffer)
 
     return NextResponse.json({ text: data.text })
-  } catch {
+  } catch (err) {
+    console.error('[parse-pdf]', err)
     return NextResponse.json({ error: 'Failed to parse PDF' }, { status: 500 })
   }
 }
